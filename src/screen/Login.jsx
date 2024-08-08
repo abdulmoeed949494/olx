@@ -4,7 +4,20 @@ import { useNavigate } from "react-router-dom"
 import Success from "./Success";
 import Error from "./Error";
 
-const Login = () => {
+function Login(){
+
+    const login = () => {
+        localStorage.setItem('login', true)
+        navigate("/");
+    }
+
+    const navigate = useNavigate();
+    useEffect(() => {
+        let login = localStorage.getItem("login");
+        if (login) {
+          navigate("/");
+        }
+    });
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -24,8 +37,6 @@ const Login = () => {
     useEffect(() => {
         localStorage.setItem("passwordData", password)
     })
-
-    const navigate = useNavigate();
 
     const [error, setError] = useState(false)
 
@@ -73,7 +84,8 @@ const Login = () => {
                         <input className='passinputp' type='text' name="password" id="password" placeholder='Password' autoComplete="off" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <div className='btnlogin'>
-                        <button className='loginbtn' type="submit" onClick={LoginCart}>Login</button>
+                        {/* <button className='loginbtn' type="submit" onClick={LoginCart}>Login</button> */}
+                        <button className='loginbtn' type="submit" onClick={login}>Login</button>
                     </div>
                 </div>
             </form>
