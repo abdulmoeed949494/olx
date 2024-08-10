@@ -3,49 +3,33 @@ import "../App.css"
 import { useNavigate } from "react-router-dom"
 import Success from "./Success";
 import Error from "./Error";
-
-function Login(){
+const Login = () => {
 
     const login = () => {
         localStorage.setItem('login', true)
         navigate("/");
     }
 
-    const navigate = useNavigate();
     useEffect(() => {
         let login = localStorage.getItem("login");
         if (login) {
           navigate("/");
         }
-    });
+    }   );
+    
+    const navigate = useNavigate();
 
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-
-    const [allEntry, setAllEntry] = useState([])
-
-    const submitForm = (e) => {
-        e.preventDefault()
-        const newEntry = { email: email, password: password }
-        setAllEntry([...allEntry, newEntry])
-    }
-
-    useEffect(() => {
-        localStorage.setItem("emailData", email)
-    })
-
-    useEffect(() => {
-        localStorage.setItem("passwordData", password)
+    const [input, setInput] = useState({
+        email: "",
+        password: "",
     })
 
     const [error, setError] = useState(false)
-
     const [success, setSuccess] = useState(false)
 
     const Successtimer = () => {
         setTimeout(() => {
             setSuccess(true)
-            navigate("/products")
         }, 1000)
     }
 
@@ -55,13 +39,21 @@ function Login(){
         }, 2000)
     }
 
-    const LoginCart = () => {
-        if (email.length >= 2 && password.length >= 2) {
-            console.log("success")
+    const createFunc = () => {
+        navigate("/signup")
+    }
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+        const loggeduser = JSON.parse(localStorage.getItem("user"));
+        if(input.email === loggeduser.email && input.password === loggeduser.password) {
+            // localStorage.setItem("loggedin", true)
+            login()
             setSuccess(true)
             Successtimer()
-        } else {
-            console.log("error")
+            navigate("/")
+        }else {
+            // alert("Wrong Email or Password.")
             setError(true)
             Errortimer()
         }
@@ -73,19 +65,27 @@ function Login(){
             <div className="flex justify-center items-center">{error && <Error />}</div>
             <div className="flex justify-center items-center">{success && <Success />}</div>
             </div>
-            <form className='loginscreen' onSubmit={submitForm}>
+            <form className='loginscreen' onSubmit={handleLogin}>
                 <div className='main'>
                     <div className='emaildiv'>
                         <p className='emailp'>Email</p>
-                        <input className='emailinputp' type='email' name="email" id="email" placeholder='Email' autoComplete="off" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input className='emailinput' type='email' name="email" id="email" placeholder='Email' autoComplete="off" value={input.email} onChange={(e) => setInput({
+                                ...input,
+                                [e.target.name]: e.target.value,
+                            })}/>
                     </div>
                     <div className='passdiv'>
                         <p className='passwordp'>Password</p>
-                        <input className='passinputp' type='text' name="password" id="password" placeholder='Password' autoComplete="off" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <input className='passinput' type='text' name="password" id="password" placeholder='Password' autoComplete="off" value={input.password} onChange={(e) => setInput({
+                                ...input,
+                                [e.target.name]: e.target.value,
+                            })}/>
                     </div>
                     <div className='btnlogin'>
-                        {/* <button className='loginbtn' type="submit" onClick={LoginCart}>Login</button> */}
-                        <button className='loginbtn' type="submit" onClick={login}>Login</button>
+                        <button className='loginbtn' type="submit">Login</button>
+                    </div>
+                    <div className='btncreate'>
+                        <button className='createbtn' type="submit" onClick={createFunc}>Create new account</button>
                     </div>
                 </div>
             </form>
@@ -95,3 +95,48 @@ function Login(){
 
 export default Login
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// login screen 2 sign or login
+
+// login form
+// neeche ek link hoga signup k liye
+
+
+// lekin age login krega  to sirf match krega password or email
+
+// or agr signup krega to local storage me save krega
+
+
+
+//  form submitted successfully
+//  name , phone, sab kyuc
+//  ek useffect me store krna  // check krkeba agr fuc se hojae

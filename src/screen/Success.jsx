@@ -1,4 +1,4 @@
-import React from 'react'
+
 
 const Success = () => {
   return (
@@ -10,7 +10,7 @@ const Success = () => {
         </svg>
         <span className="sr-only">Check icon</span>
     </div>
-    <div className="ms-3 text-sm font-normal">Item moved successfully.</div>
+    <div className="ms-3 text-sm font-normal">Success</div>
 </div>  
     </div>
   )
