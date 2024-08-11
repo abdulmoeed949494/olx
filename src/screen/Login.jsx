@@ -1,99 +1,196 @@
-import { useEffect, useState } from "react";
-import "../App.css"
-import { useNavigate } from "react-router-dom"
+import { useContext, useEffect, useState } from "react";
+import "../App.css";
+import { useNavigate } from "react-router-dom";
 import Success from "./Success";
 import Error from "./Error";
+import { StateContext } from "../state";
+
 const Login = () => {
+  const { isLogin, setIsLogin, input, setInput, error, setError, success, setSuccess, Successtimer, Errortimer } = useContext(StateContext);
 
-    const login = () => {
-        localStorage.setItem('login', true)
-        navigate("/");
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const login = localStorage.getItem("login");
+    if (login) {
+      setIsLogin(true);
+      navigate("/");
     }
+  }, [isLogin, navigate]);
 
-    useEffect(() => {
-        let login = localStorage.getItem("login");
-        if (login) {
-          navigate("/");
-        }
-    }   );
-    
-    const navigate = useNavigate();
+  const login = () => {
+    localStorage.setItem('login', true);
+    setIsLogin(true);
+    navigate("/");
+  };
 
-    const [input, setInput] = useState({
-        email: "",
-        password: "",
-    })
+  const createFunc = () => {
+    navigate("/signup");
+  };
 
-    const [error, setError] = useState(false)
-    const [success, setSuccess] = useState(false)
-
-    const Successtimer = () => {
-        setTimeout(() => {
-            setSuccess(true)
-        }, 1000)
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const loggeduser = JSON.parse(localStorage.getItem("user"));
+    if (input.email === loggeduser.email && input.password === loggeduser.password) {
+      localStorage.setItem("loggedin", true);
+      login();
+      setSuccess(true);
+      Successtimer();
+      navigate("/");
+    } else {
+      setError(true);
+      Errortimer();
     }
+  };
 
-    const Errortimer = () => {
-        setTimeout(() => {
-            setError(false)
-        }, 2000)
-    }
-
-    const createFunc = () => {
-        navigate("/signup")
-    }
-
-    const handleLogin = (e) => {
-        e.preventDefault();
-        const loggeduser = JSON.parse(localStorage.getItem("user"));
-        if(input.email === loggeduser.email && input.password === loggeduser.password) {
-            // localStorage.setItem("loggedin", true)
-            login()
-            setSuccess(true)
-            Successtimer()
-            navigate("/")
-        }else {
-            // alert("Wrong Email or Password.")
-            setError(true)
-            Errortimer()
-        }
-    }
-
-    return (
-        <div>
-            <div className="h-20">
-            <div className="flex justify-center items-center">{error && <Error />}</div>
-            <div className="flex justify-center items-center">{success && <Success />}</div>
-            </div>
-            <form className='loginscreen' onSubmit={handleLogin}>
-                <div className='main'>
-                    <div className='emaildiv'>
-                        <p className='emailp'>Email</p>
-                        <input className='emailinput' type='email' name="email" id="email" placeholder='Email' autoComplete="off" value={input.email} onChange={(e) => setInput({
-                                ...input,
-                                [e.target.name]: e.target.value,
-                            })}/>
-                    </div>
-                    <div className='passdiv'>
-                        <p className='passwordp'>Password</p>
-                        <input className='passinput' type='text' name="password" id="password" placeholder='Password' autoComplete="off" value={input.password} onChange={(e) => setInput({
-                                ...input,
-                                [e.target.name]: e.target.value,
-                            })}/>
-                    </div>
-                    <div className='btnlogin'>
-                        <button className='loginbtn' type="submit">Login</button>
-                    </div>
-                    <div className='btncreate'>
-                        <button className='createbtn' type="submit" onClick={createFunc}>Create new account</button>
-                    </div>
-                </div>
-            </form>
+  return (
+    <div>
+      <div className="h-20">
+        <div className="flex justify-center items-center">{error && <Error />}</div>
+        <div className="flex justify-center items-center">{success && <Success />}</div>
+      </div>
+      <form className='loginscreen' onSubmit={handleLogin}>
+        <div className='main'>
+          <div className='emaildiv'>
+            <p className='emailp'>Email</p>
+            <input
+              className='emailinput'
+              type='email'
+              name="email"
+              id="email"
+              placeholder='Email'
+              autoComplete="off"
+              value={input.email}
+              onChange={(e) => setInput({
+                ...input,
+                [e.target.name]: e.target.value,
+              })}
+            />
+          </div>
+          <div className='passdiv'>
+            <p className='passwordp'>Password</p>
+            <input
+              className='passinput'
+              type='text'
+              name="password"
+              id="password"
+              placeholder='Password'
+              autoComplete="off"
+              value={input.password}
+              onChange={(e) => setInput({
+                ...input,
+                [e.target.name]: e.target.value,
+              })}
+            />
+          </div>
+          <div className='btnlogin'>
+            <button className='loginbtn' type="submit">Login</button>
+          </div>
+          <div className='btncreate'>
+            <button className='createbtn' type="button" onClick={createFunc}>Create new account</button>
+          </div>
         </div>
-    )
-}
+      </form>
+    </div>
+  );
+};
 
-export default Login
+export default Login;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { useContext, useEffect, useState } from "react";
+// import "../App.css"
+// import { useNavigate } from "react-router-dom"
+// import Success from "./Success";
+// import Error from "./Error";
+// import { StateContext } from "../state";
+// const Login = () => {
+
+//     const { input, setInput, error, setError, success, setSuccess, Successtimer, Errortimer } = useContext(StateContext)
+
+//     const login = () => {
+//         localStorage.setItem('login', true)
+//         navigate("/");
+//     }
+
+//     const [isLogin, setIsLogin] = useState(false);
+
+//     const navigate = useNavigate();
+
+//     useEffect(() => {
+//         let login = localStorage.getItem("login");
+//         if (login) {
+//           navigate("/");
+//         }
+//     }, []);
+    
+
+//     const createFunc = () => {
+//         navigate("/signup")
+//     }
+
+//     const handleLogin = (e) => {
+//         e.preventDefault();
+//         const loggeduser = JSON.parse(localStorage.getItem("user"));
+//         if(input.email === loggeduser.email && input.password === loggeduser.password) {
+//             localStorage.setItem("loggedin", true)
+//             login()
+//             setSuccess(true)
+//             Successtimer()
+//             navigate("/")
+//         }else {
+//             setError(true)
+//             Errortimer()
+//         }
+//     }
+
+//     return (
+//         <div>
+//             <div className="h-20">
+//             <div className="flex justify-center items-center">{error && <Error />}</div>
+//             <div className="flex justify-center items-center">{success && <Success />}</div>
+//             </div>
+//             <form className='loginscreen' onSubmit={handleLogin}>
+//                 <div className='main'>
+//                     <div className='emaildiv'>
+//                         <p className='emailp'>Email</p>
+//                         <input className='emailinput' type='email' name="email" id="email" placeholder='Email' autoComplete="off" value={input.email} onChange={(e) => setInput({
+//                                 ...input,
+//                                 [e.target.name]: e.target.value,
+//                             })}/>
+//                     </div>
+//                     <div className='passdiv'>
+//                         <p className='passwordp'>Password</p>
+//                         <input className='passinput' type='text' name="password" id="password" placeholder='Password' autoComplete="off" value={input.password} onChange={(e) => setInput({
+//                                 ...input,
+//                                 [e.target.name]: e.target.value,
+//                             })}/>
+//                     </div>
+//                     <div className='btnlogin'>
+//                         <button className='loginbtn' type="submit">Login</button>
+//                     </div>
+//                     <div className='btncreate'>
+//                         <button className='createbtn' type="submit" onClick={createFunc}>Create new account</button>
+//                     </div>
+//                 </div>
+//             </form>
+//         </div>
+//     )
+// }
+
+// export default Login
 
 
 
